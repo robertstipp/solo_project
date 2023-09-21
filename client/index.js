@@ -20,7 +20,9 @@ const App = () => {
 
 
   return (
-    <Header>{data.name}  
+    <Header>
+      <a href="api/auth/spotify/login">Login</a>
+      <a href="api/auth/spotify/refresh">Refresh</a>
     </Header>
 
   )
