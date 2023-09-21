@@ -1,11 +1,35 @@
 import React from 'react';
-import {render} from 'react-dom'
+import {createRoot} from 'react-dom'
+
+import { useEffect,useState } from 'react';
+
+import styled from 'styled-components'
 
 const App = () => {
-  return <h1>HELLO WORLD</h1>
+  const [data, setData] = useState([])
+
+  useEffect(()=>{
+    fetch('/api')
+      .then(response=>response.json())
+      .then(data=>{
+        setData(data)
+      })
+
+
+  },[])
+
+
+  return (
+    <Header>{data.name}  
+    </Header>
+
+  )
 }
 
-render(
-  <App />,
-  document.getElementById('root')
-)
+const Header=styled.h1`
+  color: red;
+`
+const container = document.getElementById('root')
+
+const root = createRoot(container)
+root.render(<App />)

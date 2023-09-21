@@ -4,10 +4,18 @@ require('dotenv').config()
 
 const app = express()
 
-app.use(express.static(path.join(__dirname ,'../public')))
+app.use('/build', express.static(path.join(__dirname, '../build')));
 
-app.use('/home',(req,res) => {
-  res.status(200).send('hello world')
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../index.html'));
+});
+
+app.use('/api',(req,res)=>{
+  const data = {
+    name: 'bobby'
+  }
+
+  res.status(200).json(data)
 })
 
 
