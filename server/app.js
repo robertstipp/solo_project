@@ -1,21 +1,35 @@
 require('dotenv').config()
 
 const express = require('express')
+const session = require('express-session')
 const path = require('path')
-
 const morgan = require('morgan')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-
-const app = express()
+const passport = require('passport')
 
 const combinedRoutes = require('./routes/index')
 
 
+
+const app = express()
+
 // Middlewares
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({ origin: 'http://localhost:8000', credentials: true }));
 app.use(morgan('tiny'))
+
+app.use(
+  session({secret: 'just bobby', resave: true, saveUninitialized: true})
+)
+
+
+// Passport
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
 
 // Static Build Directory
 app.use('/build', express.static(path.join(__dirname, '../build')));
@@ -47,7 +61,7 @@ app.use((err,req,res,next)=>{
   console.error(stack)
 
   if (details) {
-    console.error(`[Error-Details] ${JSON.stringify(details)}`)
+    console.error(`[Error-Details] ${JSON.stringify(details)} 🧨`)
   }
 
   res.status(statusCode).json({

@@ -25,10 +25,11 @@ module.exports = {
       }
     ],
   },
+  devtool: 'source-map',
   devServer: {
     static: {
       publicPath: '/build',
-      directory: path.join(__dirname, 'public')
+      directory: path.join(__dirname, 'build')
     },
     proxy: {
       '/api' : 'http://localhost:3000'
