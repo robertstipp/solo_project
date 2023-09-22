@@ -5,7 +5,8 @@ module.exports = {
   entry: "./client/index.js",
   output : {
     filename: "bundle.js",
-    path: path.resolve(__dirname,'./build')
+    path: path.resolve(__dirname,'./build'),
+    publicPath: '/'
   },
   plugins: [new HtmlWebpackPlugin({
     title: "HTML Page",
@@ -29,16 +30,33 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        use: {
+          loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'fonts/', // where the fonts will go
+            },
+        },
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'images/'
+          }
+        }
       },
     ],
   },
   devtool: 'source-map',
   devServer: {
     static: {
-      publicPath: '/build',
+      publicPath: '/build',  
       directory: path.join(__dirname, 'build')
     },
+    
     proxy: {
       '/api' : 'http://localhost:3000'
     },

@@ -34,17 +34,20 @@ app.use(passport.session())
 // Static Build Directory
 app.use('/build', express.static(path.join(__dirname, '../build')));
 
+
 // Serve React App 
 app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../index.html'));
 });
 
+app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
+
+
 
 // API
 app.use('/api',combinedRoutes)
 
-
-// Catch All Route
 app.use('*', (req,res) => {
   res.status(200).send('catch all route')
 })

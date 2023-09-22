@@ -1,9 +1,44 @@
 import React from 'react'
+import {useNavigate} from 'react-router-dom'
+import {useState, useEffect} from 'react';
+
+import {useDispatch, useSelector} from 'react-redux'
+
+import styled from 'styled-components'
+
+import Login from '../feature/login'
+import {getUser} from '../feature/user/userSlice'
+
+// Your existing imports and other code ...
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { userInfo, status, error } = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (userInfo === null && status === 'idle') {
+      dispatch(getUser());
+    } else if (userInfo !== null) {
+      navigate('/home');
+    }
+  }, [dispatch, userInfo, status, navigate]);
+
   return (
-    <div>LandingPage</div>
-  )
-}
+    <Container>
+      {status === 'loading' && <p>Loading...</p>}
+      {error && <Login />}
+      {userInfo && <h1>{userInfo.displayName}</h1>}
+      <a href="api/auth/spotify/passport-auth">Login with Spotify</a>
+      {/* <button onClick={handleClick}>Click</button> */}
+    </Container>
+  );
+};
+
+
+const Container = styled.div`
+  display: grid;
+  place-items: center;
+`
 
 export default LandingPage

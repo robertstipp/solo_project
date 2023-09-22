@@ -22,22 +22,22 @@ const NavigationItem = ({ path, label, color }) => {
 
 const ringMixin = css`
   border-radius: 100%;
-  border: 1px solid black;
+  border: 2px solid black;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.5s ease, height 0.5s ease;
 `
-
 const Ring = styled.div`
   ${ringMixin}
   height: ${({$hover}) => ($hover ? '100px' : '50px')};
   width: ${({$hover}) => ($hover ? '100px' : '50px')};
-  background-color: ${({color}) => color};
+  background-color: ${({color}) => `var(${color})`};
 `;
 const OuterRing = styled.div`
   ${ringMixin}
+  border: 0px solid transparent;
   height: ${({$hover}) => ($hover ? '0px' : '100px')};
   width: ${({$hover}) => ($hover ? '0px' : '100px')};
   background-color: white;
@@ -64,7 +64,7 @@ const StyledNavLink = styled(NavLink)`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 1px solid transparent;
+  border: 1px solid black;
   z-index: 2;
   background-color: transparent;
   &:hover {

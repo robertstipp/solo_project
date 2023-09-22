@@ -37,11 +37,6 @@ passport.use(
       .then(user=>done(null,user))
       .catch(err=>done(err))
 
-    // Your logic to find or create a user goes here
-    // const user = {/* your user object */};
-    // const err = null; // replace with actual error, if any
-    
-    // return done(err, user);
   })
 )
 
@@ -57,6 +52,7 @@ router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/'})
 )
 router.get("/getUser",(req,res)=>{
   const sessionId =req.cookies['connect.sid']
+  console.log(sessionId)
   if (req.isAuthenticated()) {
     res.status(200).json({
       message: 'Welcome to your profile',
@@ -65,7 +61,7 @@ router.get("/getUser",(req,res)=>{
   } else {
     res.status(401).json({message: 'Unauthorized'})
   }
-  console.log(sessionId)
+  
 
   // res.redirect('/')
 })
@@ -91,7 +87,7 @@ router.get('/refresh', async (req,res)=>{
   try {
     const authResponse = await axios(authOptions);
     const access_token = authResponse.data.access_token;
-    // console.log('new access_token', access_token);
+    console.log('new access_token', access_token);
     res.cookie('access_token', access_token);
     res.redirect('/');
   } catch (error) {
