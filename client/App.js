@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {createRoot} from 'react-dom/client'
 import styled from 'styled-components'
-import GlobalStyles from './assets/GlobalStyles'
+import GlobalStyles from './assets/css/GlobalStyles'
 
 import Layout from './components/layout'
 import About from './pages/About';
@@ -42,7 +42,7 @@ const App = () => {
 
 const Container = styled.div`
   max-width: 1500px;
-  margin: 1rem auto;
+  margin: 1rem 3rem;
   display: grid;
   max-height: 100vh;
   place-items: center;

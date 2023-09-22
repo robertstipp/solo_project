@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 
-
-
 const NavigationItem = ({ path, label, color }) => {
-
   const [isHover, setIsHover] = useState(false)
-  console.log(color)
-
   return (
     <NavItem>
-      <Ring $hover={isHover ? 'true' : undefined} color={color} outter={true}/>
+      <Ring $hover={isHover ? 'true' : undefined} color={color}/>
       <OuterRing $hover={isHover ? 'true' : undefined} color={color}/>
       <StyledNavLink
         to={path}
@@ -25,31 +20,27 @@ const NavigationItem = ({ path, label, color }) => {
   );
 };
 
+const ringMixin = css`
+  border-radius: 100%;
+  border: 1px solid black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+`
+
 const Ring = styled.div`
+  ${ringMixin}
   height: ${({$hover}) => ($hover ? '100px' : '50px')};
   width: ${({$hover}) => ($hover ? '100px' : '50px')};
-  border-radius: 100%;
-  border: 1px solid black;
   background-color: ${({color}) => color};
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease;
 `;
 const OuterRing = styled.div`
+  ${ringMixin}
   height: ${({$hover}) => ($hover ? '0px' : '100px')};
   width: ${({$hover}) => ($hover ? '0px' : '100px')};
-  border-radius: 100%;
-  border: 1px solid black;
   background-color: white;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease;
 `;
 
 const NavItem = styled.li`
@@ -62,7 +53,10 @@ const NavItem = styled.li`
 
 const StyledNavLink = styled(NavLink)`
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  font-family: var(--primary-font);
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,16 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
-import NavigationList from './navigation/NavigationList'
 
+import NavigationList from './navigation/NavigationList'
+import Logo from './logo/Logo'
 const Header = () => {
   return (
     <HeaderContainer>
-      <h1>Sonar</h1>
+      <Logo/>
       <NavigationList />
     </HeaderContainer>
   )
 }
-
 
 const HeaderContainer = styled.div`
   display: flex;
