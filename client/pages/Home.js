@@ -5,22 +5,22 @@ import Welcome from '../components/welcome'
 
 import {useDispatch, useSelector} from 'react-redux'
 
-import {getMe, getTopTracks, getDailyTracks} from '../feature/user/userSlice'
+import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
 
 const Home = () => {
   const dispatch = useDispatch();
   const { genres, dailyTracks, status, error } = useSelector(state => state.user);
   
-  
+  console.log(dailyTracks)
 
   return (
     <Container>
       <Welcome message="Welcome to your profile" name='Bobby' />
       <button onClick={()=>dispatch(getMe())}>Get Me</button>
-      <button onClick={()=>dispatch(getTopTracks())}>Get Top Tracks</button>
+      <button onClick={()=>dispatch(getTopGenres())}>Get Top Genres</button>
       <div>
       {genres && genres.map((genre,index)=>{
-        return <Genre key={index}>{genre}, </Genre>
+        return <Genre key={index}>{genre}</Genre>
       })}
       
       </div>

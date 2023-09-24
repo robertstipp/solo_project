@@ -13,7 +13,7 @@ const About = () => {
 
   return (
     <Container>
-      <button onClick={()=>dispatch(getUserAnalysis())}>Get Preferences</button>
+      {/* <button onClick={()=>dispatch(getUserAnalysis())}>Get Preferences</button> */}
 
       {/* <RadarChart /> */}
     </Container>

@@ -5,16 +5,19 @@ import BarChart from '../components/charts/barChart';
 import BubbleChart from '../components/charts/bubbleChart';
 import {useDispatch, useSelector} from 'react-redux'
 
-import {getMe, getTopTracks, getDailyTracks} from '../feature/user/userSlice'
+import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
 
 
 const Profile = () => {
+
+  const {genres} = useSelector(state=>state.user)
+  console.log(genres)
   const dispatch = useDispatch()
   return (
     <Container>
-    <button onClick={()=>dispatch(getTopTracks())}>Get Top Tracks</button>
+    <button onClick={()=>dispatch(getTopGenres())}>Get Top Tracks</button>
     {/* <BarChart /> */}
-    <BubbleChart />
+    {genres && <BubbleChart />}
     </Container>
   )
 }

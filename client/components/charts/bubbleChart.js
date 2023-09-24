@@ -7,8 +7,6 @@ import * as d3 from 'd3';
 const BubbleChart = () => {
   const d3Container = useRef(null);
   const { genres, dailyTracks, status, error } = useSelector(state => state.user);
-
-  console.log(genres)
   // const data = [
   //   { value: 10, name: 'A' },
   //   { value: 20, name: 'B' },
@@ -22,8 +20,6 @@ const BubbleChart = () => {
     return {value: 20, name: genre, color: getRandomColor()}
   })
 
- 
-  
 
   useEffect(() => {
     if (data && d3Container.current) {
@@ -57,9 +53,10 @@ const BubbleChart = () => {
           .attr('font-size', '12px')
           .attr('font-family', 'var(--primary-font)')
           .attr('color', 'black')
-
+          
           textElements.each(function(d, i) {
             const node = d3.select(this);
+            if (d.name === undefined) return
             const words = d.name.split(' '); // Assume 'name' contains the text you want to stack
             
             words.forEach((word, j) => {

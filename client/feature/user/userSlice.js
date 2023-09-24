@@ -31,17 +31,17 @@ export const getMe = createAsyncThunk(
     }
   }
 );
-export const getTopTracks = createAsyncThunk(
-  "user/getTopTracks",
+export const getTopGenres = createAsyncThunk(
+  "user/getTopGenres",
   async (_, thunkAPI) => {
     try {
       const { data } = await userAPI.getTopTracks();
       if (data) {
-        const genreSet = new Set();
-        for (const item of data.items) {
-          const genreArr = item.genres
-          genreSet.add(...genreArr)
-        }
+        const genreSet = new Set()
+        const genres = data.items.map((item)=>item.genres)
+        const filtered = genres.filter((genre) => genre.length !== 0)
+        for (const arr of filtered) genreSet.add(...arr)
+        
         return Array.from(genreSet)
       }
     } catch (error) {
@@ -91,6 +91,7 @@ const initialState = {
   error: null,
   genres: [],
   dailyTracks: [],
+  userAnalysis: {acousticness: 10, danceability: 20, energy: 10, tempo: 118}
 };
 
 const userSlice = createSlice({
@@ -127,15 +128,15 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(getTopTracks.pending, (state) => {
+      .addCase(getTopGenres.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(getTopTracks.fulfilled, (state, action) => {
+      .addCase(getTopGenres.fulfilled, (state, action) => {
         state.status = "succeeded";
         
         state.genres = action.payload
       })
-      .addCase(getTopTracks.rejected, (state, action) => {
+      .addCase(getTopGenres.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
@@ -155,7 +156,7 @@ const userSlice = createSlice({
       })
       .addCase(getUserAnalysis.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.dailyTracks = action.payload
+        state.userAnalysis = action.payload
       })
       .addCase(getUserAnalysis.rejected, (state, action) => {
         state.status = "failed";
