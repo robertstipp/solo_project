@@ -69,6 +69,21 @@ export const getDailyTracks = createAsyncThunk(
   }
 );
 
+export const getUserAnalysis = createAsyncThunk(
+  "user/getUserAnalysis",
+  async (_, thunkAPI) => {
+    try {
+      const { data } = await userAPI.getUserProfileAnalysis();
+      console.log(data)  
+      return data
+      
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+
 
 const initialState = {
   userInfo: null,
@@ -132,6 +147,17 @@ const userSlice = createSlice({
         state.dailyTracks = action.payload
       })
       .addCase(getDailyTracks.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(getUserAnalysis.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUserAnalysis.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.dailyTracks = action.payload
+      })
+      .addCase(getUserAnalysis.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

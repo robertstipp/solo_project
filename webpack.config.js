@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');  // Add this line
+
 
 module.exports = {
   entry: "./client/index.js",
@@ -8,10 +10,11 @@ module.exports = {
     path: path.resolve(__dirname,'./build'),
     publicPath: '/'
   },
-  plugins: [new HtmlWebpackPlugin({
-    title: "HTML Page",
-    template: './index.html',
-  })],
+  plugins: [
+    new HtmlWebpackPlugin({title: "HTML Page", template: './index.html',}),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
+  
   module: {
     rules: [
       {
@@ -65,6 +68,7 @@ module.exports = {
     proxy: {
       '/api' : 'http://localhost:3000'
     },
-    port: 8001,
+    hot: true,
+    port: 8000
   }
 }

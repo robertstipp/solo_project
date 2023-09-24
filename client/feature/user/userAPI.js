@@ -14,5 +14,8 @@ export const userAPI = {
   },
   getDailyTracks: () => {
     return axios.get(`/api/auth/spotify/getDailyTracks`)
+  },
+  getUserProfileAnalysis: () => {
+    return axios.get(`/api/auth/spotify/getUserProfileAnalysis`)
   }
 };

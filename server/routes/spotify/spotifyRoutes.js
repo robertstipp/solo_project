@@ -50,7 +50,7 @@ passport.deserializeUser((obj,done)=>{
 })
 
 router.get('/passport-auth', passport.authenticate('spotify',{
-  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played']
+  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read']
 }))
 router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/'}),
   (req,res) => res.redirect('/')
@@ -126,21 +126,7 @@ router.get('/getDailyTracks', async (req, res) => {
   // Getting the access token from the authenticated user
   const accessToken = req.user.accessToken;
 
-  try {
-    const tracks = [];
-    // for (let hour = 40; hour >= 1; hour --) {
-    //   const after = timeFunc.getHoursAgo(hour);
-    //   const testURL = `https://api.spotify.com/v1/me/player/recently-played?before=${after}&limit=50`;
-    //   const response = await axios.get(testURL, {
-    //     headers: {
-    //       'Authorization': `Bearer ${accessToken}`
-    //     }
-    //   });
-    //   console.log(testURL)
-    //   tracks.push(...response.data.items);
-    // }
-
-    
+  try {    
       const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played?limit=50', {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -154,6 +140,28 @@ router.get('/getDailyTracks', async (req, res) => {
   }
 });
 
+router.get('/getUserProfileAnalysis', async (req,res)=>{
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  const accessToken = req.user.accessToken;
+  
+  try {    
+    const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+
+  res.status(200).json(response.data);
+} catch (error) {
+  console.error("Error fetching user data:", error, error.response ? error.response.data : '');
+  res.status(500).json({ message: 'Internal Server Error' });
+}
+  
+
+})
 
 
 router.get('/refresh', async (req,res)=>{
