@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const userRoutes = require('./auth/userRoutes')
+const userRoutes = require('./auth/authRoutes')
 const spotifyRoutes = require('./spotify/spotifyRoutes')
 
 
