@@ -3,13 +3,24 @@ import styled from 'styled-components'
 
 const Footer = () => {
   return (
-    <FooterText>Made by Bobby. </FooterText>
+    <Container>
+      <FooterText>Made by Bobby.</FooterText>
+    </Container>
+    
   )
 }
 
-const FooterText = styled.h5`
-  font-family: var(--primary-font);
-  font-size: 4.5rem;
+const Container = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start
 `
+
+const FooterText = styled.div`
+  font-family: var(--primary-font);
+  font-size: 4.3rem;
+`
+
+
 
 export default Footer

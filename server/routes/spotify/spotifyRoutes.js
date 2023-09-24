@@ -11,6 +11,9 @@ const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.NODE_ENV === 'development' ? process.env.DEV_REDIRECT_URI : process.env.PROD_REDIRECT_URI
 
+
+const timeFunc = require('../../../utils/getTime')
+
 passport.use(
   new SpotifyStrategy({
     clientID: client_id,
@@ -46,13 +49,15 @@ passport.deserializeUser((obj,done)=>{
   done(null,obj)
 })
 
-router.get('/passport-auth', passport.authenticate('spotify'))
+router.get('/passport-auth', passport.authenticate('spotify',{
+  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played']
+}))
 router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/'}),
   (req,res) => res.redirect('/')
 )
 router.get("/getUser",(req,res)=>{
   const sessionId =req.cookies['connect.sid']
-  console.log(sessionId)
+  
   if (req.isAuthenticated()) {
     res.status(200).json({
       message: 'Welcome to your profile',
@@ -65,6 +70,91 @@ router.get("/getUser",(req,res)=>{
 
   // res.redirect('/')
 })
+
+router.get('/getMe', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  // Getting the access token from the authenticated user
+  const accessToken = req.user.accessToken;
+
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
+router.get('/getTopTracks', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  // Getting the access token from the authenticated user
+  const accessToken = req.user.accessToken;
+
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/getDailyTracks', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  // Getting the access token from the authenticated user
+  const accessToken = req.user.accessToken;
+
+  try {
+    const tracks = [];
+    // for (let hour = 40; hour >= 1; hour --) {
+    //   const after = timeFunc.getHoursAgo(hour);
+    //   const testURL = `https://api.spotify.com/v1/me/player/recently-played?before=${after}&limit=50`;
+    //   const response = await axios.get(testURL, {
+    //     headers: {
+    //       'Authorization': `Bearer ${accessToken}`
+    //     }
+    //   });
+    //   console.log(testURL)
+    //   tracks.push(...response.data.items);
+    // }
+
+    
+      const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played?limit=50', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error("Error fetching user data:", error, error.response ? error.response.data : '');
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+
 
 router.get('/refresh', async (req,res)=>{
   const refresh_token = req.cookies.refresh_token;

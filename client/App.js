@@ -14,17 +14,18 @@ import {
   createRoutesFromElements,
   RouterProvider,
   Route,
+  BrowserRouter,
   Link
 } from "react-router-dom";
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<Layout />}>
-      <Route index element={<LandingPage/>}/>
-      <Route path='home' element={<Home />}/>
-      <Route path='profile' element={<Profile/>}/>
-      <Route path='about' element={<About />}/>
+    <Route path='/' Component={Layout}>
+      <Route index Component={LandingPage}/>
+      <Route path='home' Component={Home}/>
+      <Route path='profile' Component={Profile}/>
+      <Route path='about' Component={About}/>
     </Route>
   )
 )

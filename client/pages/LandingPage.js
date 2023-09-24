@@ -29,7 +29,6 @@ const LandingPage = () => {
       {status === 'loading' && <p>Loading...</p>}
       {error && <Login />}
       {userInfo && <h1>{userInfo.displayName}</h1>}
-      <a href="api/auth/spotify/passport-auth">Login with Spotify</a>
       {/* <button onClick={handleClick}>Click</button> */}
     </Container>
   );

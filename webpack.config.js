@@ -25,6 +25,10 @@ module.exports = {
         }
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
         test: /\.scss$/,
         use: ["style-loader", "css-loader", 'sass-loader'],
       },
@@ -54,12 +58,13 @@ module.exports = {
   devServer: {
     static: {
       publicPath: '/build',  
-      directory: path.join(__dirname, 'build')
+      directory: path.join(__dirname, 'build'),
+      
     },
-    
+    historyApiFallback: true,
     proxy: {
       '/api' : 'http://localhost:3000'
     },
-    port: 8000,
+    port: 8001,
   }
 }
