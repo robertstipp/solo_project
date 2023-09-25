@@ -59,7 +59,7 @@ app.use((err,req,res,next)=>{
   const message = err.message || 'Internal Server Error'
   const stack = err.stack || '';
   const details = err.detail || {};
-
+  console.log(err)
   console.error(`[Error] ${message}`)
   console.error(stack)
 

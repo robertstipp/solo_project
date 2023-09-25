@@ -22,7 +22,7 @@ const BarChart = ({}) => {
       const height = 300;
       const xScale = d3.scaleBand().domain(data.map(d => d.name)).range([0, width]).padding(0.2);
       const yScale = d3.scaleLinear().domain([0, d3.max(data, d => d.value)]).range([height, 0]);
-
+      svg.selectAll('*').remove();
       // Append bars
       svg.selectAll(".bar")
         .data(data)
@@ -32,7 +32,7 @@ const BarChart = ({}) => {
         .attr("y", d => yScale(d.value))
         .attr("width", xScale.bandwidth())
         .attr("height", d => height - yScale(d.value))
-        .attr("fill", "steelblue");
+        .attr("fill", "blue");
     }
   }, [data]);
 

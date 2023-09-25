@@ -1,10 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import NowPlaying from '../../../feature/nowplaying/NowPlaying'
+
 const Footer = () => {
   return (
     <Container>
       <FooterText>Made by Bobby.</FooterText>
+      <NowPlaying />
     </Container>
     
   )

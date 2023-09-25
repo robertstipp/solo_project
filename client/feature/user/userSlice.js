@@ -24,7 +24,7 @@ export const getMe = createAsyncThunk(
       const { data } = await userAPI.getMe();
       if (data) {
         console.log(data)
-        return data.user
+        return data
       }
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -91,7 +91,7 @@ const initialState = {
   error: null,
   genres: [],
   dailyTracks: [],
-  userAnalysis: {acousticness: 10, danceability: 20, energy: 10, tempo: 118}
+  userAnalysis: {acousticness: 10, danceability: 20, energy: 10, tempo: 50}
 };
 
 const userSlice = createSlice({

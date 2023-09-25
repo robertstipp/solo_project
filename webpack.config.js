@@ -12,7 +12,6 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({title: "HTML Page", template: './index.html',}),
-    new webpack.HotModuleReplacementPlugin(),
   ],
   
   module: {
@@ -68,7 +67,6 @@ module.exports = {
     proxy: {
       '/api' : 'http://localhost:3000'
     },
-    hot: true,
     port: 8000
   }
 }

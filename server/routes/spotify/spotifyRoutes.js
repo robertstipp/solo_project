@@ -12,7 +12,6 @@ const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.NODE_ENV === 'development' ? process.env.DEV_REDIRECT_URI : process.env.PROD_REDIRECT_URI
 
 
-const timeFunc = require('../../../utils/getTime')
 
 passport.use(
   new SpotifyStrategy({
@@ -50,11 +49,21 @@ passport.deserializeUser((obj,done)=>{
 })
 
 router.get('/passport-auth', passport.authenticate('spotify',{
-  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read']
+  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing']
 }))
-router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/'}),
-  (req,res) => res.redirect('/')
-)
+router.get('/callback', 
+    passport.authenticate('spotify', {failureRedirect: '/login'}),
+    (req, res) => {
+        if (req.query && req.query.error) {
+            // handle the error scenario
+            const errorMsg = req.query.error_description || 'Unknown error';
+            console.error(`Auth failed with error: ${errorMsg}`);
+            return res.status(401).json({error: errorMsg});
+        }
+        res.redirect('/');
+    }
+);
+
 router.get("/getUser",(req,res)=>{
   const sessionId =req.cookies['connect.sid']
   
@@ -68,7 +77,6 @@ router.get("/getUser",(req,res)=>{
   }
   
 
-  // res.redirect('/')
 })
 
 router.get('/getMe', async (req, res) => {
@@ -146,7 +154,19 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
   }
 
   const accessToken = req.user.accessToken;
-  
+  const getTracks = (offset) => {
+    return axios.get(`https://api.spotify.com/v1/me/tracks?offset=${offset}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+  }
+  const result = []
+  for (let i = 0; i < 100; i++) {
+    const response = await getTracks(i*20)
+    result.push(...response.data.items)
+  }
+  console.log(result.length)
   try {    
     const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
       headers: {
@@ -154,6 +174,7 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
       }
     })
 
+    console.log(response.data)
   res.status(200).json(response.data);
 } catch (error) {
   console.error("Error fetching user data:", error, error.response ? error.response.data : '');
