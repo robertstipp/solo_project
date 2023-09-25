@@ -162,11 +162,14 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
     })
   }
   const result = []
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 5; i++) {
     const response = await getTracks(i*20)
     result.push(...response.data.items)
   }
-  console.log(result.length)
+  // FOR AUDIO ANALYSIS
+  const trackIDs = result.map((item)=>item.track.id)
+  console.log(trackIDs)
+  
   try {    
     const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
       headers: {
@@ -174,7 +177,7 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
       }
     })
 
-    console.log(response.data)
+  
   res.status(200).json(response.data);
 } catch (error) {
   console.error("Error fetching user data:", error, error.response ? error.response.data : '');

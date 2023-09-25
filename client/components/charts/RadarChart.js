@@ -5,7 +5,6 @@ const RadarChart = ({analysis}) => {
 
   useEffect(() => {
     // D3 code here
-    console.log(analysis)
     // const data = [10,20,30,60]
     const data = Object.values(analysis)
     const labels = Object.keys(analysis)

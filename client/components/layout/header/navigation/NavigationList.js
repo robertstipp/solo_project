@@ -12,7 +12,7 @@ export const NavigationList = () => {
   return (
     <Container>
       {links.map((link, index) => (
-          <NavigationItem key={index} path={link.path} label={link.label} color={link.color}/>
+          <NavigationItem key={index} index={index} path={link.path} label={link.label} color={link.color}/>
         )
       )}
     </Container>

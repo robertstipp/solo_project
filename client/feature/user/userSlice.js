@@ -75,7 +75,7 @@ export const getUserAnalysis = createAsyncThunk(
     try {
       const { data } = await userAPI.getUserProfileAnalysis();
       console.log(data)  
-      return data
+      return {acousticness: 10, danceability: 20, energy: 10, tempo: 50}
       
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

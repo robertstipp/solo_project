@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled, {css} from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 
-const NavigationItem = ({ path, label, color }) => {
+const NavigationItem = ({ index ,path, label, color }) => {
   const [isHover, setIsHover] = useState(false)
+  const [isSlide, setIsSlide] = useState(false)
+
+  useEffect(()=>setIsSlide(true),[])
   return (
-    <NavItem>
+    <NavItem $isSlide={isSlide} $index={index}>
       <Ring $hover={isHover ? 'true' : undefined} color={color}/>
       <OuterRing $hover={isHover ? 'true' : undefined} color={color}/>
       <StyledNavLink
@@ -49,6 +52,9 @@ const NavItem = styled.li`
   align-items: center;
   justify-content: center;
   list-style: none;
+  transform: ${({ $isSlide }) => ($isSlide ? 'translateY(0)' : 'translateY(-200%)')};
+  transition: ${({$index}) => `transform 0.5s ease-out ${$index * .2}s`}
+  /* transition: transform 0.5s ease-out; */
 `;
 
 const StyledNavLink = styled(NavLink)`
