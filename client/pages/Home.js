@@ -11,7 +11,10 @@ const Home = () => {
   const dispatch = useDispatch();
   const { genres, dailyTracks, status, error } = useSelector(state => state.user);
   
-  console.log(dailyTracks)
+  useEffect(()=>{
+    dispatch(getMe())
+    
+  },[])
 
   return (
     <Container>

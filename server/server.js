@@ -21,8 +21,10 @@ const fetchCurrentlyPlaying = async (accessToken) => {
         'Authorization': `Bearer ${accessToken}`
       }
     })
-    console.log(response)
-    return response.data.item.name;
+    const imgUrl = response.data.item.album.images[2].url
+    const artistName = response.data.item.album.artists.map((artist)=>artist.name)
+    const trackName = response.data.item.name
+    return {imgUrl, artistName, trackName}
   } catch (error) {
     console.log(error)
     console.log(`Error`)
@@ -40,17 +42,17 @@ wss.on('connection', (ws) => {
     if (user) {
       const response = await fetchCurrentlyPlaying(user.accessToken)
       if (response) {
-        ws.send(response)
+        ws.send(JSON.stringify(response))
       }
       
       intervalId = setInterval(async () => {
         const response = await fetchCurrentlyPlaying(user.accessToken)
         if (response) {
-          ws.send(response)
+          ws.send(JSON.stringify(response))
         }
       }, 30000)
     } else {
-      ws.send('...waiting')
+      ws.send(JSON.stringify({imgUrl:null, artistName: null, trackName: null}))
     }
 
   });
@@ -64,15 +66,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-// server.on('upgrade', (request, socket, head) => {
-//   const url = new URL(request.url, 'http://localhost:3000'); // Replace 'localhost' with your server address
-//   const userId = url.searchParams.get('userId');
-//   console.log('User ID:', userId);
 
-//   wss.handleUpgrade(request, socket, head, (ws) => {
-//     wss.emit('connection', ws, request);
-//   });
-// });
 
 
 

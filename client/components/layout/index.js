@@ -19,7 +19,7 @@ const Layout = () => {
 
 const Container = styled.div`
   display: grid;
-  height: 100vh;
+  height: 90vh;
   width: 100%;
   grid-template-rows: 20% 60% 20%;
 `

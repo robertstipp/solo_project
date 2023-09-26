@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 
 import styled from 'styled-components';
 import BarChart from '../components/charts/barChart';
@@ -11,12 +11,18 @@ import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
 const Profile = () => {
 
   const {genres} = useSelector(state=>state.user)
-  console.log(genres)
   const dispatch = useDispatch()
+
+  useEffect(()=>{
+    if (genres !== null) {
+      // dispatch(getTopGenres())
+      // dispatch(getMe())
+    }
+  },[])
+  
   return (
     <Container>
-    <button onClick={()=>dispatch(getTopGenres())}>Get Top Tracks</button>
-    {/* <BarChart /> */}
+    {/* <button onClick={()=>dispatch(getTopGenres())}>Get Top Tracks</button> */}
     {genres && <BubbleChart />}
     </Container>
   )

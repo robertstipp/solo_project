@@ -4,13 +4,14 @@ import * as d3 from 'd3';
 const RadarChart = ({analysis}) => {
 
   useEffect(() => {
-    // D3 code here
-    // const data = [10,20,30,60]
+    
+
+    
+    const colors = ['#225095','#fac901', '#dd0100']
     const data = Object.values(analysis)
     const labels = Object.keys(analysis)
-
-    const maxes = [20,50,40,60]
-    const colors = ['red','yellow','blue','green']
+    console.log(labels)
+    const maxes = [1,1,1,1, 1,1,1,1,1,200]
     const svg = d3.select('#my-svg')
       .append('svg')
       .attr('width', 500)
@@ -65,7 +66,7 @@ const RadarChart = ({analysis}) => {
       .attr('cx',xPos )
       .attr('cy',yPos )
       .attr('r', 10)
-      .attr('fill', colors[i]);
+      .attr('fill', colors[i % colors.length]);
 
       
 

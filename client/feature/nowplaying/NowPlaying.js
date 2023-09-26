@@ -10,6 +10,9 @@ const NowPlaying = () => {
   const {userInfo} = useSelector(state=>state.user)
 
   const [track, setTrack] = useState("...waiting")
+  const [trackName, setTrackName] = useState("loading")
+  const [imgUrl, setImgUrl] = useState(null)
+  const [artistName, setArtistName] = useState(null)
 
   useEffect(() => {
     if (userInfo !== null) {
@@ -23,8 +26,11 @@ const NowPlaying = () => {
     
 
     ws.onmessage = (message) => {
-
-      setTrack(message.data)
+      const {trackName, imgUrl, artistName} = JSON.parse(message.data)
+      console.log(trackName, imgUrl, artistName)
+      setTrackName(trackName)
+      setImgUrl(imgUrl)
+      setArtistName(artistName)
     };
 
     ws.onclose = () => {
@@ -40,13 +46,32 @@ const NowPlaying = () => {
     
   }, [userInfo]);
   return (
-    <NowPlayingText>{track}</NowPlayingText>
+    <Container>
+    <div>
+    <TrackText>{trackName}</TrackText>
+    <ArtistText>{artistName}</ArtistText>
+    </div>
+    
+    <img src={imgUrl} alt="" />
+    </Container>
+    
   )
 }
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+  justify-content: flex-start;
+`
 
-const NowPlayingText = styled.div`
+const TrackText = styled.div`
   font-family: var(--primary-font);
-  font-size: 4.3rem;
+  font-size: 1.3rem;
+`
+const ArtistText = styled.div`
+  font-family: var(--primary-font);
+  font-size: .75rem;
 `
 
 export default NowPlaying

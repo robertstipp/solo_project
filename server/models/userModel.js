@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   spotifyId: String,
   accessToken: String,
   refreshToken: String,
-  // Add other fields as needed
+
 });
 
 const User = mongoose.model('User', userSchema);

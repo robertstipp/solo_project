@@ -42,7 +42,7 @@ const BubbleChart = () => {
         .attr('class', 'bubble')
         .attr('r', d => radiusScale(d.value))
         .attr('stroke', d => d.color)
-        .attr("stroke-width", 3)
+        .attr('stroke-width', 6)
         .attr('fill', 'white');
       
         const textElements = svg.selectAll('.label')
@@ -71,7 +71,7 @@ const BubbleChart = () => {
       const simulation = d3.forceSimulation(data)
         .force('x', d3.forceX(width / 2).strength(0.1))  // Increase the strength here
         .force('y', d3.forceY(height / 2).strength(0.1)) 
-        .force('charge', d3.forceManyBody().strength(-10))
+        .force('charge', d3.forceManyBody().strength(-20))
         .force('collide', d3.forceCollide(d => radiusScale(d.value)))
         .on('tick', ticked);
 

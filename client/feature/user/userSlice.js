@@ -75,7 +75,12 @@ export const getUserAnalysis = createAsyncThunk(
     try {
       const { data } = await userAPI.getUserProfileAnalysis();
       console.log(data)  
-      return {acousticness: 10, danceability: 20, energy: 10, tempo: 50}
+      return {
+        acousticness: data.acousticness, 
+        danceability: data.danceability, 
+        energy: data.energy, 
+        tempo: data.tempo
+      }
       
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -91,7 +96,18 @@ const initialState = {
   error: null,
   genres: [],
   dailyTracks: [],
-  userAnalysis: {acousticness: 10, danceability: 20, energy: 10, tempo: 50}
+  userAnalysis: {
+    danceability: .5, 
+    energy: .5,
+    loudness: .5,
+    mode: 1,
+    speechiness: .5,
+    acousticness:.5,
+    instrumentalness: .4,
+    liveness: .1, 
+    valence:.5,
+    tempo: 120,
+  },
 };
 
 const userSlice = createSlice({

@@ -49,7 +49,7 @@ passport.deserializeUser((obj,done)=>{
 })
 
 router.get('/passport-auth', passport.authenticate('spotify',{
-  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing']
+  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing', 'streaming']
 }))
 router.get('/callback', 
     passport.authenticate('spotify', {failureRedirect: '/login'}),
@@ -161,24 +161,55 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
       }
     })
   }
-  const result = []
-  for (let i = 0; i < 5; i++) {
-    const response = await getTracks(i*20)
-    result.push(...response.data.items)
-  }
-  // FOR AUDIO ANALYSIS
-  const trackIDs = result.map((item)=>item.track.id)
-  console.log(trackIDs)
-  
-  try {    
-    const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
+
+  const getAudioFeatures = async (ids) => {
+    return axios.get(`https://api.spotify.com/v1/audio-features?ids=${ids}`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
     })
 
+  }
   
-  res.status(200).json(response.data);
+  const result = []
+  try {
+  for (let i = 0; i < 10; i++) {
+    const response = await getTracks(i*20)
+    result.push(...response.data.items)
+  }
+  // FOR AUDIO ANALYSIS
+  let trackIDs = result.map((item)=>item.track.id)
+  const audioFeatures = [0,0,0,0]
+  const count = trackIDs.length
+  while (trackIDs.length > 0) {
+    const idString = trackIDs.slice(0,50).join(",")
+    const response = await getAudioFeatures(idString)
+    const tracks = response.data.audio_features
+    for (const track of tracks) {
+      const {danceability,tempo, acousticness, energy} = track
+      audioFeatures[0] += danceability
+      audioFeatures[1] += tempo
+      audioFeatures[2] += acousticness
+      audioFeatures[3] += energy
+    }
+    trackIDs = trackIDs.slice(51)
+  }
+  const avgAudioFeatures = audioFeatures.map((featureSum) => featureSum/count)
+  console.log(avgAudioFeatures)
+  // try {    
+  //   const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
+  //     headers: {
+  //       'Authorization': `Bearer ${accessToken}`
+  //     }
+  //   })
+
+  const userAnalysis = {
+    danceability: avgAudioFeatures[0],
+    tempo: avgAudioFeatures[1],
+    acousticness: avgAudioFeatures[2],
+    energy: avgAudioFeatures[3]
+  }
+  res.status(200).json(userAnalysis);
 } catch (error) {
   console.error("Error fetching user data:", error, error.response ? error.response.data : '');
   res.status(500).json({ message: 'Internal Server Error' });
