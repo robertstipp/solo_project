@@ -18,7 +18,7 @@ const app = express()
 app.use(cookieParser());
 app.use(cors({ origin: 'http://localhost:8000', credentials: true }));
 app.use(morgan('tiny'))
-
+app.use(express.json())
 app.use(
   session({secret: 'just bobby', resave: true, saveUninitialized: true})
 )

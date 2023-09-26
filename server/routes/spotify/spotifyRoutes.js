@@ -49,7 +49,7 @@ passport.deserializeUser((obj,done)=>{
 })
 
 router.get('/passport-auth', passport.authenticate('spotify',{
-  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing', 'streaming']
+  scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing', 'streaming', 'user-modify-playback-state']
 }))
 router.get('/callback', 
     passport.authenticate('spotify', {failureRedirect: '/login'}),
@@ -216,6 +216,30 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
 }
   
 
+})
+
+router.post('/startWebPlayer', async (req,res)=>{
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  
+  const accessToken = req.user.accessToken;
+  const {deviceId} = req.body
+  console.log(accessToken)
+  try {
+    const response = await axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {}, {
+      headers: {
+      'Authorization': `Bearer ${accessToken}`
+      }
+      });
+    console.log(response)
+  } catch (error) {
+    console.error("Error fetching user data:", error, error.response ? error.response.data : '');
+    console.log("Response data:", error.response.data);
+    console.log("Response status:", error.response.status);
+    console.log("Response headers:", error.response.headers);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 })
 
 

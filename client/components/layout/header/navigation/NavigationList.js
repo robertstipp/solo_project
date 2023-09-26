@@ -6,8 +6,8 @@ import NavigationItem from './NavigationItem'
 export const NavigationList = () => {
   const links = [
     {path: '/home', label: 'home', color: '--primary-red'},
-    {path: '/about', label: 'about', color: '--primary-yellow'},
-    {path: '/profile', label: 'profile', color: '--primary-blue'},
+    {path: '/data', label: 'data', color: '--primary-yellow'},
+    {path: '/genres', label: 'genres', color: '--primary-blue'},
   ]
   return (
     <Container>

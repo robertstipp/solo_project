@@ -8,12 +8,15 @@ import RadarChart from '../components/charts/radarChart.js'
 import Dashboard from '../components/dashboard'
 
 import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
-const About = () => {
+const Data = () => {
 
   const dispatch = useDispatch()
   const { userAnalysis } = useSelector((state)=>state.user)
   useEffect(()=>{
-    dispatch(getMe())
+    if (userAnalysis === null) {
+      dispatch(getMe())
+
+    }
     // dispatch(getUserAnalysis())
   },[])
 
@@ -35,4 +38,4 @@ const Container = styled.div`
   
 `
 
-export default About
+export default Data

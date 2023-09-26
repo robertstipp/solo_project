@@ -14,13 +14,14 @@ import {getUser} from '../feature/user/userSlice'
 const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo, status, error } = useSelector(state => state.user);
-
+  const { userInfo, userCredentials, status, error } = useSelector(state => state.user);
+  console.log(userCredentials)
   useEffect(() => {
     if (userInfo === null && status === 'idle') {
       dispatch(getUser());
-    } else if (userInfo !== null) {
-      navigate('/home');
+    } else if (userCredentials !== null) {
+      console.log(userCredentials)
+      navigate('/data');
     }
   }, [dispatch, userInfo, status, navigate]);
 

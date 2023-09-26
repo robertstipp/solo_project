@@ -8,14 +8,14 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
 
 
-const Profile = () => {
+const Genres = () => {
 
   const {genres} = useSelector(state=>state.user)
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    if (genres !== null) {
-      // dispatch(getTopGenres())
+    if (genres === null) {
+      dispatch(getTopGenres())
       // dispatch(getMe())
     }
   },[])
@@ -33,4 +33,4 @@ const Container = styled.div`
   place-items: center;
 `
 
-export default Profile
+export default Genres

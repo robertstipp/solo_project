@@ -92,6 +92,7 @@ export const getUserAnalysis = createAsyncThunk(
 
 const initialState = {
   userInfo: null,
+  userCredentials: null,
   status: "idle",
   error: null,
   genres: [],
@@ -127,7 +128,7 @@ const userSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.userInfo = action.payload;
+        state.userCredentials = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.status = "failed";
@@ -149,7 +150,6 @@ const userSlice = createSlice({
       })
       .addCase(getTopGenres.fulfilled, (state, action) => {
         state.status = "succeeded";
-        
         state.genres = action.payload
       })
       .addCase(getTopGenres.rejected, (state, action) => {

@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import GlobalStyles from './assets/css/GlobalStyles'
 
 import Layout from './components/layout'
-import About from './pages/About';
+import Data from './pages/Data';
 import Home from './pages/Home';
-import Profile from './pages/Profile';
+import Genres from './pages/Genres';
 import LandingPage from './pages/LandingPage';
 
 import {
@@ -24,8 +24,8 @@ const router = createBrowserRouter(
     <Route path='/' Component={Layout}>
       <Route index Component={LandingPage}/>
       <Route path='home' Component={Home}/>
-      <Route path='profile' Component={Profile}/>
-      <Route path='about' Component={About}/>
+      <Route path='genres' Component={Genres}/>
+      <Route path='data' Component={Data}/>
     </Route>
   )
 )

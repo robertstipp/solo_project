@@ -33,7 +33,7 @@ const RadarChart = ({analysis}) => {
       .attr('cy', 250)
       .attr('r', i * 20)
       .attr('fill', 'rgba(255, 255, 255, 0.0')
-      .attr('stroke', 'black')
+      .attr('stroke', 'rgba(0,0,0,.25')
       .attr('stroke-width', '2');
       // .on('mouseover', function (d) {
       //   d3.select(this)
@@ -74,6 +74,8 @@ const RadarChart = ({analysis}) => {
         .attr('x', labelXPos)
         .attr('y', labelYPos)
         .text(labels[i])
+        .attr('transform-origin', `center`)
+        .attr('transform', `rotate(${1})`)
         .attr('font-size', '12px')
         .attr('font-family', 'var(--primary-font)')
         // .attr('transform', `rotate(${angle*360}, ${labelXPos}, ${labelYPos})`)

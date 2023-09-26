@@ -1,18 +1,27 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 
-import { useSelector } from 'react-redux'
-import NowPlaying from '../../../feature/nowplaying/NowPlaying'
-import WebPlayback from '../../webplayback'
 
+import { useDispatch, useSelector } from 'react-redux'
+import NowPlaying from '../../../feature/nowplaying/NowPlaying'
+import WebPlayback from '../../../feature/webplayback'
+
+import { getUser } from '../../../feature/user/userSlice'
 
 const Footer = () => {
-  const {userInfo} = useSelector(state=>state.user)
-  console.log(userInfo)
+  const {userCredentials} = useSelector(state=>state.user)
+  const dispatch = useDispatch()
+
+  useEffect(()=>{
+    dispatch(getUser())
+  },[])
+  if (userCredentials !== null){
+    console.log(userCredentials)
+  }
   return (
     <Container>
       <FooterText>Made by Bobby.</FooterText>
-      <WebPlayback token='BQCf7uLaBt0P_D5wy5r-BooCX7vD6CQnONfBRnZb04uAiLyMcwxjGzpfeDGm7b0R514VKwZxJlaF-cj2gWpoZT8cBH_0NQ6A9JPfSBgbuKFdXY19h-dAQP21dB0eE4oD6ELJ6v1Zag3Fkux3-R0JQzEIkzgF8Ef6mUalmVt1ZmEdKE6-bj1C572sITCEGLKWRcOMChuzANMl1pYP_XAVRjpcysw' />
+      {/* {userCredentials?.accessToken && <WebPlayback token={userCredentials.accessToken} />} */}
       {/* <NowPlaying /> */}
     </Container>
   )
