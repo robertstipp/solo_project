@@ -17,7 +17,7 @@ const Data = () => {
       dispatch(getMe())
 
     }
-    // dispatch(getUserAnalysis())
+    dispatch(getUserAnalysis())
   },[])
 
   return (
@@ -25,7 +25,11 @@ const Data = () => {
       {/* <button onClick={()=>dispatch(getUserAnalysis())}>Get Preferences</button> */}
       {/* <BubbleChart /> */}
       {userAnalysis && <Dashboard/>}
-      {userAnalysis && <RadarChart analysis={userAnalysis} />}
+      {userAnalysis && 
+      <ChartContainer>
+        <RadarChart analysis={userAnalysis} />
+      </ChartContainer>
+      }
       
       
     </Container>
@@ -34,8 +38,12 @@ const Data = () => {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 50% 50%;
-  
+  grid-template-columns: 50% 50%; 
+`
+const ChartContainer =styled.div`
+  display: grid;
+  place-items: center;
+
 `
 
 export default Data

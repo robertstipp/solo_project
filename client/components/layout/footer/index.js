@@ -13,10 +13,10 @@ const Footer = () => {
   const dispatch = useDispatch()
 
   useEffect(()=>{
-    dispatch(getUser())
+    // dispatch(getUser())
   },[])
   if (userCredentials !== null){
-    console.log(userCredentials)
+    // console.log(userCredentials)
   }
   return (
     <Container>

@@ -9,7 +9,6 @@ const Login = () => {
   const [labelText, setLabeledText] = useState("Hover Swarm")
 
   const handleHover = () => {{
-    console.log('hello')
   }}
   return (
     <Container onMouseOver={()=>setIsHovered(true)}>

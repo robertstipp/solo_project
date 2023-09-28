@@ -38,13 +38,11 @@ passport.use(
       })
       .then(user=>done(null,user))
       .catch(err=>done(err))
-
   })
 )
 
 passport.serializeUser((user,done)=>done(null,user))
 passport.deserializeUser((obj,done)=>{
-  console.log(obj)
   done(null,obj)
 })
 
@@ -52,7 +50,7 @@ router.get('/passport-auth', passport.authenticate('spotify',{
   scope: ['user-read-email', 'user-read-private','user-top-read','user-read-recently-played','user-library-read', 'user-read-currently-playing', 'streaming', 'user-modify-playback-state']
 }))
 router.get('/callback', 
-    passport.authenticate('spotify', {failureRedirect: '/login'}),
+    passport.authenticate('spotify', {failureRedirect: '/'}),
     (req, res) => {
         if (req.query && req.query.error) {
             // handle the error scenario
@@ -102,7 +100,7 @@ router.get('/getMe', async (req, res) => {
 });
 
 
-router.get('/getTopTracks', async (req, res) => {
+router.get('/getTopArtists', async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
@@ -112,6 +110,29 @@ router.get('/getTopTracks', async (req, res) => {
 
   try {
     const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+router.get('/getTopTracks', async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  // Getting the access token from the authenticated user
+  const accessToken = req.user.accessToken;
+
+  try {
+    const response = await axios.get('https://api.spotify.com/v1/me/top/tracks', {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
@@ -173,29 +194,62 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
   
   const result = []
   try {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1; i++) {
     const response = await getTracks(i*20)
     result.push(...response.data.items)
   }
   // FOR AUDIO ANALYSIS
   let trackIDs = result.map((item)=>item.track.id)
-  const audioFeatures = [0,0,0,0]
+  // const audioFeatures = [0,0,0,0]
+  const audioFeatures = {
+    danceability: 0,
+    tempo: 0,
+    acousticness: 0,
+    energy: 0,
+    speechiness: 0,
+    valence: 0,
+    instrumentalness: 0,
+    liveness: 0,
+    mode: 0,
+  }
   const count = trackIDs.length
   while (trackIDs.length > 0) {
     const idString = trackIDs.slice(0,50).join(",")
     const response = await getAudioFeatures(idString)
     const tracks = response.data.audio_features
+    // for (const track of tracks) {
+    //   const {danceability,tempo, acousticness, energy} = track
+    //   audioFeatures[0] += danceability
+    //   audioFeatures[1] += tempo
+    //   audioFeatures[2] += acousticness
+    //   audioFeatures[3] += energy
+    // }
     for (const track of tracks) {
-      const {danceability,tempo, acousticness, energy} = track
-      audioFeatures[0] += danceability
-      audioFeatures[1] += tempo
-      audioFeatures[2] += acousticness
-      audioFeatures[3] += energy
+      const {
+        danceability,
+        tempo, 
+        acousticness, 
+        energy, 
+        speechiness, 
+        valence,
+        instrumentalness,
+        liveness,
+        mode
+      } = track
+      audioFeatures.acousticness = audioFeatures.acousticness + acousticness 
+      audioFeatures.tempo = audioFeatures.tempo + tempo 
+      audioFeatures.danceability = audioFeatures.danceability + danceability 
+      audioFeatures.energy = audioFeatures.energy + energy 
+      audioFeatures.speechiness = audioFeatures.speechiness + speechiness 
+      audioFeatures.valence = audioFeatures.valence + valence 
+      audioFeatures.instrumentalness = audioFeatures.instrumentalness + instrumentalness 
+      audioFeatures.liveness = audioFeatures.liveness + liveness 
+      audioFeatures.mode = audioFeatures.mode + mode 
+  
     }
     trackIDs = trackIDs.slice(51)
   }
-  const avgAudioFeatures = audioFeatures.map((featureSum) => featureSum/count)
-  console.log(avgAudioFeatures)
+  // const avgAudioFeatures = audioFeatures.map((featureSum) => featureSum/count)
   // try {    
   //   const response = await axios.get('https://api.spotify.com/v1/me/tracks', {
   //     headers: {
@@ -203,11 +257,22 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
   //     }
   //   })
 
+  // const userAnalysis = {
+  //   danceability: avgAudioFeatures[0],
+  //   tempo: avgAudioFeatures[1],
+  //   acousticness: avgAudioFeatures[2],
+  //   energy: avgAudioFeatures[3]
+  // }
   const userAnalysis = {
-    danceability: avgAudioFeatures[0],
-    tempo: avgAudioFeatures[1],
-    acousticness: avgAudioFeatures[2],
-    energy: avgAudioFeatures[3]
+    danceability: audioFeatures['danceability'] / count,
+    tempo: audioFeatures['tempo'] / count,
+    acousticness: audioFeatures['acousticness'] / count,
+    energy: audioFeatures['energy'] / count,
+    speechiness: audioFeatures['speechiness'] / count,
+    valence: audioFeatures['valence'] / count,
+    instrumentalness: audioFeatures['instrumentalness'] / count,
+    liveness: audioFeatures['liveness'] / count,
+    mode: audioFeatures['mode'] / count,
   }
   res.status(200).json(userAnalysis);
 } catch (error) {
@@ -225,14 +290,13 @@ router.post('/startWebPlayer', async (req,res)=>{
   
   const accessToken = req.user.accessToken;
   const {deviceId} = req.body
-  console.log(accessToken)
   try {
     const response = await axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {}, {
       headers: {
       'Authorization': `Bearer ${accessToken}`
       }
       });
-    console.log(response)
+    
   } catch (error) {
     console.error("Error fetching user data:", error, error.response ? error.response.data : '');
     console.log("Response data:", error.response.data);

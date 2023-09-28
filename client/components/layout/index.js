@@ -19,8 +19,8 @@ const Layout = () => {
 
 const Container = styled.div`
   display: grid;
-  height: 90vh;
+  /* height: 90vh; */
   width: 100%;
-  grid-template-rows: 20% 60% 20%;
+  grid-template-rows: 20vh 70vh 10vh;
 `
 export default Layout

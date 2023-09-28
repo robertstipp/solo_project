@@ -15,13 +15,12 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo, userCredentials, status, error } = useSelector(state => state.user);
-  console.log(userCredentials)
   useEffect(() => {
     if (userInfo === null && status === 'idle') {
       dispatch(getUser());
     } else if (userCredentials !== null) {
       console.log(userCredentials)
-      navigate('/data');
+      navigate('/home');
     }
   }, [dispatch, userInfo, status, navigate]);
 

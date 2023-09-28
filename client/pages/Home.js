@@ -1,38 +1,53 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 import Welcome from '../components/welcome'
+import TrackList from '../components/tracklist'
 
+import Favorites from '../components/favorites'
 
 import {useDispatch, useSelector} from 'react-redux'
 
-import {getMe, getTopGenres, getDailyTracks} from '../feature/user/userSlice'
+import {getMe, getTopGenres, getDailyTracks, getTopTracks} from '../feature/user/userSlice'
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { genres, dailyTracks, status, error } = useSelector(state => state.user);
+  const { genres, dailyTracks,topArtists, topTracks, topGenres, status, error } = useSelector(state => state.user);
   
   useEffect(()=>{
     dispatch(getMe())
-    
+    dispatch(getDailyTracks())
+    dispatch(getTopGenres())
+    dispatch(getTopTracks())
   },[])
-
   return (
     <Container>
-      <Welcome message="Welcome to your profile" name='Bobby' />
-      <button onClick={()=>dispatch(getMe())}>Get Me</button>
-      <button onClick={()=>dispatch(getTopGenres())}>Get Top Genres</button>
-      <div>
-      {genres && genres.map((genre,index)=>{
-        return <Genre key={index}>{genre}</Genre>
-      })}
-      
-      </div>
-      <button onClick={()=>dispatch(getDailyTracks())}>Get Daily</button>
-      <div>
-      {dailyTracks && dailyTracks.map((track,index)=>{
-        return <Track key={index}>{track}, </Track>
-      })}
-      </div>
+      <Column>
+        <Welcome message="Welcome to your profile" name='Bobby'/>
+        <Favorites 
+          artists={topArtists}
+          tracks={topTracks}
+          genres={topGenres}
+        />
+      </Column>
+      <Column>
+        {/* <div>
+          {genres && genres.map((genre,index)=>{
+          return <Genre key={index}>{genre}</Genre>
+        })}
+        </div> */}
+        <div>
+
+        {dailyTracks && <TrackList tracks={dailyTracks}/>}
+        {/* {dailyTracks && dailyTracks.map((track,index)=>{  
+          return <Track key={index}>{track}, </Track>
+          })} */}
+        </div>
+
+      </Column>
+      {/* <Column>
+        <button onClick={()=>dispatch(getMe())}>Get Me</button>
+        <button onClick={()=>dispatch(getTopGenres())}>Get Top Genres</button>
+      </Column> */}
   
     </Container> 
   )
@@ -40,8 +55,12 @@ const Home = () => {
 
 const Container = styled.div`
   display: grid;
-  place-items: center;
-  grid-template-rows: 100px;
+  justify-content: center;
+  align-items: flex-start;
+  grid-template-columns: 1fr 2fr;
+`
+const Column = styled.div`
+
 `
 const Genre = styled.div`
   display: inline;

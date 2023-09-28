@@ -12,18 +12,18 @@ const Genres = () => {
 
   const {genres} = useSelector(state=>state.user)
   const dispatch = useDispatch()
-
   useEffect(()=>{
-    if (genres === null) {
+    if (genres.length === 0) {
       dispatch(getTopGenres())
-      // dispatch(getMe())
     }
+      // dispatch(getMe())
   },[])
-  
+  console.log(genres)
   return (
     <Container>
+      <GenreHeader>TOP GENRES</GenreHeader>
     {/* <button onClick={()=>dispatch(getTopGenres())}>Get Top Tracks</button> */}
-    {genres && <BubbleChart />}
+    {genres.length !== 0  && <BubbleChart />}
     </Container>
   )
 }
@@ -31,6 +31,11 @@ const Genres = () => {
 const Container = styled.div`
   display: grid;
   place-items: center;
+`
+const GenreHeader = styled.div`
+font-family : var(--primary-font);
+font-size: 3.5rem;
+align-self: center;
 `
 
 export default Genres

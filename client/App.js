@@ -44,9 +44,9 @@ const App = () => {
 const Container = styled.div`
   max-width: 1500px;
   margin: 1rem 3rem;
-  display: grid;
-  max-height: 100vh;
-  place-items: center;
+  /* display: grid; */
+  /* max-height: 100vh; */
+  /* place-items: center; */
 ` 
 
 export default App

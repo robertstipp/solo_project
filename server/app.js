@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../index.html'));
 });
 
+
 app.use('/fonts', express.static(path.join(__dirname, '../public/fonts')));
 app.use('/images', express.static(path.join(__dirname, '../public/images')));
 

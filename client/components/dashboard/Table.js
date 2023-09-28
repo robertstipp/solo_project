@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 const Table = ({data}) => {
-  console.log(Object.entries(data))
   return (
     <Container>
       {Object.entries(data).map(([label,value])=>{

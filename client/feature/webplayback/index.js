@@ -42,8 +42,19 @@ function WebPlayback(props) {
 
             setPlayer(player);
 
-            player.addListener('ready', ({ device_id }) => {
+            player.addListener('ready', async ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
+                const headers = { 
+                    'Authorization': `Bearer ${props.token}`,
+                    'Content-Type': 'application/json'
+                };
+                const data = {
+                    "device_ids" : [
+                        device_id
+                    ]
+                }
+                const response  = await axios.put('https://api.spotify.com/v1/me/player',data,{headers})
+                console.log(response)
             });
 
             player.addListener('not_ready', ({ device_id }) => {

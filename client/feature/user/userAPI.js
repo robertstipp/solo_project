@@ -9,6 +9,9 @@ export const userAPI = {
   getMe: () => {
     return axios.get(`/api/auth/spotify/getMe`)
   },
+  getTopArtists: () => {
+    return axios.get(`/api/auth/spotify/getTopArtists`)
+  },
   getTopTracks: () => {
     return axios.get(`/api/auth/spotify/getTopTracks`)
   },

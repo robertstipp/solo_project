@@ -1,23 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useSelector } from 'react-redux'
 import * as d3 from 'd3';
 
 
 
 const BubbleChart = () => {
   const d3Container = useRef(null);
-  const { genres, dailyTracks, status, error } = useSelector(state => state.user);
-  // const data = [
-  //   { value: 10, name: 'A' },
-  //   { value: 20, name: 'B' },
-  //   { value: 30, name: 'C' },
-  //   { value: 40, name: 'D' },
-  // ];
+  const { genres, genresCount, dailyTracks, status, error } = useSelector(state => state.user);
+
   const colors = ['#dd0100','#fac901','#225095']
   const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)]
 
   const data = genres.map((genre)=>{
-    return {value: 20, name: genre, color: getRandomColor()}
+    return {value: genresCount[genre], name: genre, color: getRandomColor()}
   })
 
 
@@ -30,10 +25,10 @@ const BubbleChart = () => {
 
       const radiusScale = d3.scaleSqrt()
         .domain([0, d3.max(data, d => d.value)])
-        .range([5, 60]);
+        .range([5, 75]);
 
       // Clear the previous SVG content
-      svg.selectAll('*').remove();
+      // svg.selectAll('*').remove();
 
       // Create the circles
       const circles = svg.selectAll('.bubble')
@@ -50,9 +45,15 @@ const BubbleChart = () => {
           .join('text')
           .attr('class','label')
           .attr('text-anchor', 'middle')
-          .attr('font-size', '12px')
+          .attr('font-size', d => `${d.value*4.5 + 2}px`)
           .attr('font-family', 'var(--primary-font)')
           .attr('color', 'black')
+          .on("mouseover", function (event,d) {
+            d3.select(this).attr('font-size', '12px')
+          })
+          .on("mouseout", function (event,d) {
+            d3.select(this).attr('font-size', d => `${d.value*4.5 + 2}px`)
+          })
           
           textElements.each(function(d, i) {
             const node = d3.select(this);
@@ -69,7 +70,7 @@ const BubbleChart = () => {
 
       // Create the force simulation
       const simulation = d3.forceSimulation(data)
-        .force('x', d3.forceX(width / 2).strength(0.1))  // Increase the strength here
+        .force('x', d3.forceX(width / 2).strength(0.05))  // Increase the strength here
         .force('y', d3.forceY(height / 2).strength(0.1)) 
         .force('charge', d3.forceManyBody().strength(-20))
         .force('collide', d3.forceCollide(d => radiusScale(d.value)))
