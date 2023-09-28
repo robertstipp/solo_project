@@ -64,6 +64,8 @@ const RadarChart = ({analysis}) => {
 
     }
 
+
+
     let maxR = 10 * size
 
     // Make Dots
@@ -82,24 +84,42 @@ const RadarChart = ({analysis}) => {
 
 
       points.push([xPos,yPos])
-      // svg.append('circle')
-      // .attr('cx',xPos )
-      // .attr('cy',yPos )
-      // .attr('r', 10)
-      // .attr('fill', colors[i % colors.length]);
 
-      
-
-      svg.append('text')
-        .attr('x', labelXPos)
-        .attr('y', labelYPos)
-        .text(labels[i])
-        // .attr('transform-origin', `center`)
-        .attr("transform", `translate(${labelXPos}, ${labelYPos}) rotate(${angle * 360 / (Math.PI * 2) + 90}) translate(-${labelXPos}, -${labelYPos})`)
-        .attr('font-size', '12px')
-        .attr('font-family', 'var(--primary-font)')
+      // svg.append('text')
+      //   .attr('x', labelXPos)
+      //   .attr('y', labelYPos)
+      //   .text(labels[i])
+      //   // .attr('transform-origin', `center`)
+      //   .attr("transform", `translate(${labelXPos}, ${labelYPos}) rotate(${angle * 360 / (Math.PI * 2) + 90}) translate(-${labelXPos}, -${labelYPos})`)
+      //   .attr('font-size', '16px')
+      //   .attr('font-family', 'var(--primary-font)')
         // .attr('transform', `rotate(${angle*360}, ${labelXPos}, ${labelYPos})`)
     }
+
+    svg.append("path")
+  .attr("id", "circlePath")
+  .attr("d", `M ${chartXOrigin-maxR} ${chartYOrigin} 
+              a ${maxR} ${maxR} 0 1,0 ${maxR*2} 0 
+              a ${maxR} ${maxR} 0 1,0 ${-maxR*2} 0`)
+  .style("fill", "none")
+  .style("stroke", "none");
+
+  for (let i = 0; i < labels.length; i++) {
+    let angle = (i / labels.length) * (Math.PI * 2);
+    let textAngle = angle * 360 / (Math.PI * 2) - 90;
+  
+    svg.append('text')
+      .append("textPath")  //append a textPath to the text element
+      .attr("xlink:href", "#circlePath")  //place the ID of the path here
+      .attr("startOffset", `${(i / labels.length) * 100}%`)  //place the text halfway on the arc
+      .attr("dy", -5)  //shift the text a bit
+      .attr('font-size', '18px')
+      .attr('font-family', 'var(--primary-font)')
+      .text(labels[i]);
+  }
+  
+
+
     const lineGenerator = d3.line();
     svg.append('path')
     .attr('d', lineGenerator(points.concat([points[0]])))  // Connect the last point to the first

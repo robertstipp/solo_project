@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <Container>
       <DashBoardHeader>
-        Dashboard  
+        Audio Features
       </DashBoardHeader>
 
       <Table data={userAnalysis} />
@@ -29,7 +29,7 @@ const Container = styled.div`
 `
 const DashBoardHeader = styled.div`
   font-family : var(--primary-font);
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   align-self: center;
 `
 

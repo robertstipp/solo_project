@@ -15,7 +15,8 @@ const GlobalStyles = createGlobalStyle`
     --primary-red:  #dd0100;
     --primary-yellow:  #fac901;
     --primary-blue:  #225095;
-    --primary-font: 'Geometos'
+    --primary-font: 'Geometos';
+    --secondary-font: 'Roboto'
   }
 `;
 

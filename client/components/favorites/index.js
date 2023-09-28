@@ -7,7 +7,9 @@ const FavoriteList = ({artists, tracks, genres}) => {
   return (
     <div>
       <FavoriteTracks tracks={tracks} />
+      <hr></hr>
       <FavoriteGenres genres={genres} />
+      <hr></hr>
       <FavoriteArtists artists={artists} />
     </div>
   )

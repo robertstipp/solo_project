@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <Container>
       <Column>
-        <Welcome message="Welcome to your profile" name='Bobby'/>
+        {/* <Welcome message="Welcome to your profile" name='Bobby'/> */}
         <Favorites 
           artists={topArtists}
           tracks={topTracks}
