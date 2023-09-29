@@ -274,6 +274,11 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
     liveness: audioFeatures['liveness'] / count,
     mode: audioFeatures['mode'] / count,
   }
+  const foundUser = await User.findOne({spotifyId: req.user.spotifyId})
+  foundUser.userAnalysis = userAnalysis
+  await foundUser.save()
+
+  
   res.status(200).json(userAnalysis);
 } catch (error) {
   console.error("Error fetching user data:", error, error.response ? error.response.data : '');
@@ -281,6 +286,31 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
 }
   
 
+})
+
+router.get('/getDistanceAnalysis', async (req,res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const curUser = await User.findOne({spotifyId: req.user.spotifyId})
+  const allUsers = await User.find({})
+  
+  const allDist = allUsers.map((user)=>{
+    const result = {
+      spotifyId : user.spotifyId,
+    }
+    let sum = 0
+    for (const [key, value] of Object.entries(user.userAnalysis)) {
+      const del = curUser.userAnalysis[key] - value
+      result[`del${key}`] = del
+      sum += (Math.pow(del,2))
+    }
+    result['distance'] = Math.sqrt(sum);
+    return result
+  })
+  
+  const sortedAllDist = allDist.sort((a,b)=>a.distance - b.distance)
+  return res.status(200).json(sortedAllDist)
 })
 
 router.post('/startWebPlayer', async (req,res)=>{

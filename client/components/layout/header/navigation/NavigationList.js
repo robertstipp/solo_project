@@ -8,6 +8,7 @@ export const NavigationList = () => {
     {path: '/home', label: 'home', color: '--primary-red'},
     {path: '/data', label: 'data', color: '--primary-yellow'},
     {path: '/genres', label: 'genres', color: '--primary-blue'},
+    {path: '/find', label: 'find', color: '--primary-red'},
   ]
   return (
     <Container>

@@ -18,7 +18,6 @@ const Genres = () => {
     }
       // dispatch(getMe())
   },[])
-  console.log(genres)
   return (
     <Container>
       <GenreHeader>TOP GENRES</GenreHeader>

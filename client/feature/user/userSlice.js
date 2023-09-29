@@ -78,6 +78,18 @@ export const getTopTracks = createAsyncThunk(
   }
 );
 
+export const getUserDistanceAnalysis = createAsyncThunk(
+  "user/getUserDistanceAnalysis",
+  async (_, thunkAPI) => {
+    try {
+      const response = await userAPI.getDistanceAnalysis()
+      console.log(response.data)
+      return response.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+)
 
 export const getDailyTracks = createAsyncThunk(
   "user/getDailyTracks",
@@ -93,7 +105,8 @@ export const getDailyTracks = createAsyncThunk(
             trackName: item.track.name,
             popularity: item.track.popularity,
             artist:  item.track.artists.map((artist)=>artist.name).join(", "),
-            img: item.track.album.images[2].url
+            img: item.track.album.images[2].url,
+            preview_url: item.track.preview_url
           }
           if (!trackSet.has(item.track.name)) {
             trackSet.add(item.track.name)
@@ -147,6 +160,7 @@ const initialState = {
   topArtists: [],
   topTracks: [],
   topGenres: [],
+  userDistances: [],
 };
 
 const userSlice = createSlice({
@@ -229,7 +243,18 @@ const userSlice = createSlice({
       .addCase(getUserAnalysis.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      .addCase(getUserDistanceAnalysis.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUserDistanceAnalysis.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.userDistances = action.payload
+      })
+      .addCase(getUserDistanceAnalysis.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
   }
 });
 

@@ -8,6 +8,7 @@ import Data from './pages/Data';
 import Home from './pages/Home';
 import Genres from './pages/Genres';
 import LandingPage from './pages/LandingPage';
+import Find from './pages/Find';
 
 import {
   createBrowserRouter,
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
       <Route path='home' Component={Home}/>
       <Route path='genres' Component={Genres}/>
       <Route path='data' Component={Data}/>
+      <Route path='find' Component={Find}/>
     </Route>
   )
 )

@@ -20,5 +20,8 @@ export const userAPI = {
   },
   getUserProfileAnalysis: () => {
     return axios.get(`/api/auth/spotify/getUserProfileAnalysis`)
+  },
+  getDistanceAnalysis: () => {
+    return axios.get(`/api/auth/spotify/getDistanceAnalysis`)
   }
 };

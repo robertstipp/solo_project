@@ -61,7 +61,6 @@ module.exports = {
     static: {
       publicPath: '/build',  
       directory: path.join(__dirname, 'build'),
-      
     },
     historyApiFallback: true,
     proxy: {

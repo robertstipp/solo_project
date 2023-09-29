@@ -48,6 +48,7 @@ const BubbleChart = () => {
           .attr('font-size', d => `${d.value*4.5 + 2}px`)
           .attr('font-family', 'var(--primary-font)')
           .attr('color', 'black')
+          .attr('cursor', 'pointer')
           .on("mouseover", function (event,d) {
             d3.select(this).attr('font-size', '12px')
           })
