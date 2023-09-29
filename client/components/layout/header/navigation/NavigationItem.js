@@ -16,6 +16,7 @@ const NavigationItem = ({ index ,path, label, color }) => {
         to={path}
         onMouseEnter={()=>setIsHover(true)}
         onMouseLeave={()=>setIsHover(false)}
+        color={color}
       >
         {label}
       </StyledNavLink>
@@ -78,6 +79,11 @@ const StyledNavLink = styled(NavLink)`
     color: white;
     transition: color 0.25s ease;
   }
+  &.active {
+    background-color: ${({color}) => `var(${color})`};
+    color: white;
+  }
+
 `;
 
 export default NavigationItem;

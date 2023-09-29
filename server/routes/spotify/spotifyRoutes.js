@@ -189,7 +189,6 @@ router.get('/getUserProfileAnalysis', async (req,res)=>{
         'Authorization': `Bearer ${accessToken}`
       }
     })
-
   }
   
   const result = []
@@ -298,10 +297,17 @@ router.get('/getDistanceAnalysis', async (req,res) => {
   const allDist = allUsers.map((user)=>{
     const result = {
       spotifyId : user.spotifyId,
+      displayName: user.displayName
     }
     let sum = 0
     for (const [key, value] of Object.entries(user.userAnalysis)) {
-      const del = curUser.userAnalysis[key] - value
+      let del;
+      // const del = curUser.userAnalysis[key] - value
+      if (key === 'tempo') {
+        del = curUser.userAnalysis[key] / 300 - value / 300
+      } else {
+        del = curUser.userAnalysis[key] - value
+      }
       result[`del${key}`] = del
       sum += (Math.pow(del,2))
     }
@@ -309,7 +315,7 @@ router.get('/getDistanceAnalysis', async (req,res) => {
     return result
   })
   
-  const sortedAllDist = allDist.sort((a,b)=>a.distance - b.distance)
+  const sortedAllDist = allDist.sort((a,b)=>a.distance - b.distance).slice(0,10)
   return res.status(200).json(sortedAllDist)
 })
 

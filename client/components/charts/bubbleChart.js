@@ -38,7 +38,7 @@ const BubbleChart = () => {
         .attr('r', d => radiusScale(d.value))
         .attr('stroke', d => d.color)
         .attr('stroke-width', 6)
-        .attr('fill', 'white');
+        .attr('fill', 'white')
       
         const textElements = svg.selectAll('.label')
           .data(data)
@@ -50,7 +50,7 @@ const BubbleChart = () => {
           .attr('color', 'black')
           .attr('cursor', 'pointer')
           .on("mouseover", function (event,d) {
-            d3.select(this).attr('font-size', '12px')
+            d3.select(this).attr('font-size', `${Math.max(12, d.value*4.5 + 2)}px`)
           })
           .on("mouseout", function (event,d) {
             d3.select(this).attr('font-size', d => `${d.value*4.5 + 2}px`)

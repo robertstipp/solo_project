@@ -1,12 +1,19 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Outlet} from 'react-router-dom';
 
 import styled from 'styled-components'
 
+import { useDispatch } from 'react-redux';
 import Header from './header'
 import Footer from './footer'
 
+
+import {getMe} from '../../feature/user/userSlice'
 const Layout = () => {
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(getMe())
+  },[])
   return (
     <Container>
       <Header />

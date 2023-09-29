@@ -14,7 +14,7 @@ const Home = () => {
   const { genres, dailyTracks,topArtists, topTracks, topGenres, status, error } = useSelector(state => state.user);
   
   useEffect(()=>{
-    dispatch(getMe())
+    // dispatch(getMe())
     dispatch(getDailyTracks())
     dispatch(getTopGenres())
     dispatch(getTopTracks())

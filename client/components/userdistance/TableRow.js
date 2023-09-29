@@ -1,9 +1,10 @@
 import React from 'react'
 
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const TableRow = ({user}) => {
   const {
+    displayName,
     spotifyId,
     deldanceability,
     deltempo,
@@ -19,7 +20,7 @@ const TableRow = ({user}) => {
   const roundTwo = (number) => Math.floor(number*100) / 100
   return (
     <TableRowContainer>
-      <TableValue>{spotifyId.slice(-4)}</TableValue>
+      <DisplayName>{displayName}</DisplayName>
       <TableValue $value={delacousticness}>{roundTwo(delacousticness)}</TableValue>
       <TableValue $value={deldanceability}>{roundTwo(deldanceability)}</TableValue>
       <TableValue $value={delenergy}>{roundTwo(delenergy)}</TableValue>
@@ -41,9 +42,13 @@ const TableRowContainer = styled.div`
   align-items: center;
   justify-content: center;
 `
-const TableValue = styled.div`
-  font-family: 1rem;
+const valueMixin = css`
+  font-family: 'roboto';
   text-align: center;
+`
+
+const TableValue = styled.div`
+  ${valueMixin}
   font-size: 2rem;
   font-family: 'roboto';
   color: ${({$value}) => {
@@ -52,5 +57,8 @@ const TableValue = styled.div`
     if ($value > 0) return 'green'
   }};
   /* width: ${({$hover}) => ($hover ? '0px' : '100px')}; */
+`
+const DisplayName = styled.div`
+  ${valueMixin}
 `
 export default TableRow

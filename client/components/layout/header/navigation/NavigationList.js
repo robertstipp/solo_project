@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import NavigationItem from './NavigationItem'
+import Profile from './Profile'
 
 export const NavigationList = () => {
   const links = [
@@ -16,6 +17,7 @@ export const NavigationList = () => {
           <NavigationItem key={index} index={index} path={link.path} label={link.label} color={link.color}/>
         )
       )}
+      {/* <Profile /> */}
     </Container>
   )
 }
